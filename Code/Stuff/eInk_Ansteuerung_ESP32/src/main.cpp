@@ -41,10 +41,10 @@
 // Genutztes Display 200x200 1.54inch Schwarz / Weiss E-Ink Display
 // https://www.bastelgarage.ch/index.php?route=product/product&path=67_84&product_id=428
 #include <GxGDEP015OC1/GxGDEP015OC1.cpp>
-
+#include <Arduino.h>
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.cpp>
-#include <GxIO/GxIO.cpp>
+//#include <GxIO/GxIO.cpp>
 
 
 
@@ -66,7 +66,7 @@ void setup(void)
   display.fillScreen(GxEPD_WHITE);  // Display Weiss füllen
   display.setRotation(1);           // Display um 90° drehen
 
-  
+
   display.update();                 // Display aktualisieren
 }
 
@@ -74,7 +74,7 @@ void setup(void)
 void loop()
 {
 
-  
+
 
     display.setRotation(1);                // Display um 90° drehen
     display.setTextColor(GxEPD_BLACK);     // Schriftfarbe Schwarz
@@ -85,7 +85,7 @@ void loop()
     display.fillRect(0, 0, 200, 128, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h
 
 
-   
+
   }
 
 }
