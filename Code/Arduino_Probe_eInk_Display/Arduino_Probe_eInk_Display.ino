@@ -40,13 +40,22 @@
 
 // Genutztes Display 200x200 1.54inch Schwarz / Weiss E-Ink Display
 // https://www.bastelgarage.ch/index.php?route=product/product&path=67_84&product_id=428
-#include <GxGDEP015OC1/GxGDEP015OC1.cpp>
+//#include <GxGDEP015OC1/GxGDEP015OC1.cpp>
 
-
+#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
 #include <GxIO/GxIO_SPI/GxIO_SPI.cpp>
 #include <GxIO/GxIO.cpp>
 
+#include <GxIO/GxIO_SPI/GxIO_SPI.h>
+#include <GxIO/GxIO.h>
 
+#include GxEPD_BitmapExamples
+
+// FreeFonts from Adafruit_GFX
+#include <Fonts/FreeMonoBold9pt7b.h>
+#include <Fonts/FreeMonoBold12pt7b.h>
+#include <Fonts/FreeMonoBold18pt7b.h>
+#include <Fonts/FreeMonoBold24pt7b.h>
 
 
 /**************************(Definieren der genutzten Variabeln)****************************/
@@ -54,10 +63,11 @@
 int interval = 5000;
 long lastTime = 5000;
 
-GxIO_Class io(SPI, SS, 17, 16);  //SPI,SS,DC,RST
+
+GxIO_Class io(SPI, SS, 17, 16);  //SPI,CS,DC,RST
 GxEPD_Class display(io, 16, 4);  //io,RST,BUSY
 
-/*****************************************( Setup )****************************************/
+/*****************************************(Setup)****************************************/
 void setup(void)
 {
   Serial.begin(115200);
@@ -77,15 +87,16 @@ void loop()
   
 
     display.setRotation(1);                // Display um 90° drehen
-    display.setTextColor(GxEPD_BLACK);     // Schriftfarbe Schwarz
+    display.setTextColor(GxEPD_BLACK);     // Schriftfarbe Schwar
     display.print("Test");
+    delay(20000);
 
     // Rechteck mit weissem Hintergrund erstellen
     //X-Position, Y-Position, Breite, Höhe, Farbe
     display.fillRect(0, 0, 200, 128, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h
 
-
+    display.update();
    
-  }
+  
 
 }
