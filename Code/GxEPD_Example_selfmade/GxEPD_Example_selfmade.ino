@@ -96,7 +96,6 @@ void loop()
     // Rechteck mit weissem Hintergrund erstellen
     //X-Position, Y-Position, Breite, Höhe, Farbe
     display.fillRect(0, 0, 384, 640, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h
-    display.fillRect(100, 0, 300, 400, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h
 
     display.update();
   
@@ -142,7 +141,7 @@ void loop()
     display.println("pqrstuvwxyz{|}~ ");
   }*/
 
-  /*void drawCornerTest()
+  void drawCornerTest()
     {
     display.drawCornerTest();
     delay(5000);
@@ -150,16 +149,30 @@ void loop()
     for (uint16_t r = 0; r < 4; r++)
     {
       display.setRotation(r);
-      display.fillScreen(GxEPD_WHITE);
-      display.fillRect(0, 0, 8, 8, GxEPD_BLACK);
-      display.fillRect(display.width() - 18, 0, 16, 16, GxEPD_BLACK);
-      display.fillRect(display.width() - 25, display.height() - 25, 24, 24, GxEPD_BLACK);
-      display.fillRect(0, display.height() - 33, 32, 32, GxEPD_BLACK);
+      display.fillScreen(GxEPD_WHITE); //Xpos,Ypos,box-w,box-h
+      
+      display.fillRect(0, 0, 370, 148, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Raum
+      display.fillRect(4, 4, 366, 265, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Raum (Rahmenstärke: 4 Pixel)
+
+      display.fillRect(0, 148, 409, 236, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Klasse
+      display.fillRect(4, 144, 405, 232, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Klasse (Rahmenstärke: 4 Pixel)
+
+      display.fillRect(409, 266, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Datum&Einheit
+      display.fillRect(413, 270, 401, 228, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Datum&Einheit (Rahmenstärke: 4 Pixel)
+
+      display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
+      display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
+
+      display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
+      display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
+
+      
+      
       display.update();
       delay(5000);
     }
     display.setRotation(rotation); // restore
     }
 
-  */
+  
 }
