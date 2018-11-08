@@ -45,10 +45,10 @@
 //#include <GxGDEW027C44/GxGDEW027C44.h>    // 2.7" b/w/r
 //#include <GxGDEW027W3/GxGDEW027W3.h>      // 2.7" b/w
 //#include <GxGDEW042T2/GxGDEW042T2.h>      // 4.2" b/w
-#include <GxGDEW042Z15/GxGDEW042Z15.h>    // 4.2" b/w/r
+//#include <GxGDEW042Z15/GxGDEW042Z15.h>    // 4.2" b/w/r
 //#include <GxGDEW0583T7/GxGDEW0583T7.h>    // 5.83" b/w
 //#include <GxGDEW075T8/GxGDEW075T8.h>      // 7.5" b/w
-//#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
+#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
 
 #include GxEPD_BitmapExamples
 
@@ -88,7 +88,7 @@ void loop()
   //display.println("Test!");
   //display.update();
 
-  display.setRotation(1);                // Display um 90° drehen
+    display.setRotation(1);                // Display um 90° drehen
     display.setTextColor(GxEPD_BLACK);     // Schriftfarbe Schwar
     display.print("Test");
     delay(20000);
