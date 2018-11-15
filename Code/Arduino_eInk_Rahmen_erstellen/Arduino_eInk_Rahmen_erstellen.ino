@@ -28,31 +28,30 @@ GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16
 
 void setup() {
   Serial.begin(115200);
-  Serial.println();
-  Serial.println("setup");
+  //Serial.println();
+  //Serial.println("setup");
 
   display.init(115200); // enable diagnostic output on Serial
   display.fillScreen(GxEPD_WHITE); 
   display.update();
 
-  Serial.println("setup done");
+  //Serial.println("setup done");
 
 }
 
 void loop() {
   //display.setRotation(1);                // Display um 90° drehen
-  display.setTextColor(GxEPD_BLACK);     // Schriftfarbe Schwar
-  display.print("Test");
-  delay(20000);
+  //display.setTextColor(GxEPD_RED);     // Schriftfarbe Grün
+  //display.print("Test");
+  //delay(2000);
 
   // Rechteck mit weissem Hintergrund erstellen
   //X-Position, Y-Position, Breite, Höhe, Farbe
-  display.fillRect(0, 0, 384, 640, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h
+  //display.fillRect(0, 0, 384, 640, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h
 
-  display.update();
+  //display.update();
 
 
-  display.fillScreen(GxEPD_WHITE); //Xpos,Ypos,box-w,box-h
       
   display.fillRect(0, 0, 370, 148, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Raum
   display.fillRect(4, 4, 366, 265, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Raum (Rahmenstärke: 4 Pixel)
@@ -68,8 +67,8 @@ void loop() {
 
   display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
   display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
-
+  
   display.update();
-  delay(5000);
+  delay(500000000000);
 
 }
