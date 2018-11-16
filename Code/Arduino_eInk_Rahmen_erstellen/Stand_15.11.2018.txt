@@ -1,4 +1,3 @@
-
 #include <GxEPD.h>
 
 // select the display class to use, only one
@@ -48,13 +47,13 @@ void loop() {
 
 
   /*
-  //display.setRotation(1);                // Display um 90Â° drehen
-  //display.setTextColor(GxEPD_RED);     // Schriftfarbe GrÃ¼n
+  //display.setRotation(1);                // Display um 90° drehen
+  //display.setTextColor(GxEPD_RED);     // Schriftfarbe Grün
   //display.print("Test");
   //delay(2000);
 
   // Rechteck mit weissem Hintergrund erstellen
-  //X-Position, Y-Position, Breite, HÃ¶he, Farbe
+  //X-Position, Y-Position, Breite, Höhe, Farbe
   //display.fillRect(0, 0, 384, 640, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h
 
   //display.update();
@@ -62,19 +61,19 @@ void loop() {
 
       
   display.fillRect(0, 0, 370, 148, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Raum
-  display.fillRect(4, 4, 366, 265, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Raum (RahmenstÃ¤rke: 4 Pixel)
+  display.fillRect(4, 4, 366, 265, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Raum (Rahmenstärke: 4 Pixel)
 
   display.fillRect(0, 148, 409, 236, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Klasse
-  display.fillRect(4, 144, 405, 232, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Klasse (RahmenstÃ¤rke: 4 Pixel)
+  display.fillRect(4, 144, 405, 232, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Klasse (Rahmenstärke: 4 Pixel)
 
   display.fillRect(409, 266, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Datum&Einheit
-  display.fillRect(413, 270, 401, 228, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Datum&Einheit (RahmenstÃ¤rke: 4 Pixel)
+  display.fillRect(413, 270, 401, 228, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Datum&Einheit (Rahmenstärke: 4 Pixel)
 
   display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
-  display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (RahmenstÃ¤rke: 4 Pixel)
+  display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
 
   display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
-  display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (RahmenstÃ¤rke: 4 Pixel)
+  display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
   
   display.update();
   delay(500000000000);
