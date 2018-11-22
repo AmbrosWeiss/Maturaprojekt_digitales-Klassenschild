@@ -14,11 +14,10 @@
 //#include <GxGDEW042T2/GxGDEW042T2.h>      // 4.2" b/w
 //#include <GxGDEW042Z15/GxGDEW042Z15.h>    // 4.2" b/w/r
 //#include <GxGDEW0583T7/GxGDEW0583T7.h>    // 5.83" b/w
-#include <GxGDEW075T8/GxGDEW075T8.h>      // 7.5" b/w
-//#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
+//#include <GxGDEW075T8/GxGDEW075T8.h>      // 7.5" b/w
+#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
 
-//#include Code/Arduino_eInk_Rahmen_erstellen/img/Rahmen
-#include "img/Rahmen3.h"
+#include "img/Rahmen13.h"
 //#include GxEPD_BitmapExamples
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
@@ -34,11 +33,10 @@ void setup() {
   //Serial.println("setup");
 
   display.init(115200); // enable diagnostic output on Serial
+
   //display.fillScreen(GxEPD_WHITE); 
   
-  display.drawBitmap(Rahmen3, sizeof(Rahmen3));
-  //display.drawExamplePicture(Rahmen3, sizeof(Rahmen3));
-  display.update();
+
 
   //Serial.println("setup done");
 
@@ -46,6 +44,8 @@ void setup() {
 
 void loop() {
 
+  display.drawBitmap(Rahmen13, sizeof(Rahmen13));
+  display.update();
 
   /*
   //display.setRotation(1);                // Display um 90° drehen
