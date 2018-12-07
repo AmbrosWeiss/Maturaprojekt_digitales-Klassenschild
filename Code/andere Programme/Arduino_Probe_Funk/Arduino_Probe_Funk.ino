@@ -1,4 +1,4 @@
-#include <Adafruit_SSD1306.h>
+//#include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 
 /*    Arduino Long Range Wireless Communication using HC-12

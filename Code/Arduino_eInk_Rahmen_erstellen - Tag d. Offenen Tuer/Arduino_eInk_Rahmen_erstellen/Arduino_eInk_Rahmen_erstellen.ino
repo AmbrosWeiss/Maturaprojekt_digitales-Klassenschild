@@ -1,7 +1,5 @@
-//reguläres Programm
+//Tag der Offenen Tür
 #include <GxEPD.h>
-//#include <Adafruit_SSD1306.h>
-#include <Adafruit_GFX.h>
 
 // select the display class to use, only one
 //#include <GxGDEP015OC1/GxGDEP015OC1.h>    // 1.54" b/w
@@ -16,10 +14,10 @@
 //#include <GxGDEW042T2/GxGDEW042T2.h>      // 4.2" b/w
 //#include <GxGDEW042Z15/GxGDEW042Z15.h>    // 4.2" b/w/r
 //#include <GxGDEW0583T7/GxGDEW0583T7.h>    // 5.83" b/w
-//#include <GxGDEW075T8/GxGDEW075T8.h>      // 7.5" b/w
-#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
+#include <GxGDEW075T8/GxGDEW075T8.h>      // 7.5" b/w
+//#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
 
-#include "img/Rahmen13.h"
+#include "img/Rahmen1.h"
 //#include GxEPD_BitmapExamples
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
@@ -46,59 +44,8 @@ void setup() {
 
 void loop() {
 
-  display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
-  display.setTextSize(4);
-  display.setTextColor(GxEPD_BLACK, GxEPD_WHITE);
-  
-  //aktuelle Klasse
-  display.setCursor(220,108);
-  display.print("5 BHELS");
-  
-  //Raumnummer
-  display.setTextSize(4);
-  display.setCursor(220,295);
-  display.print("318");
-  
-  //Stammklasse
-  display.setTextSize(2);
-  display.setCursor(220,350);
-  display.print("5 BHELS");
-  
-  //Datum
-  display.setTextSize(2);
-  //x,y
-  display.setCursor(540,22);
-  display.print("07.12");
-  
-  //Einheit
-  display.setTextSize(2);
-  display.setCursor(540,45);
-  display.print("5. EH");
-  
-  //Lehrer
-  display.setTextSize(2);
-  display.setCursor(540,108);
-  display.print("ENGEL");
-  
-  //Gegenstand
-  display.setTextSize(2);
-  display.setCursor(570,187);
-  display.print("D");
-  
-  //nächster Lehrer
-  display.setTextSize(2);
-  display.setCursor(500,285);
-  display.print("WOLF");
-  
-  //nächste Klasse
-  display.setTextSize(2);
-  display.setCursor(500,305);
-  display.print("5 BHELS");
-  
-  //nächstes Fach
-  display.setTextSize(2);
-  display.setCursor(500,327);
-  display.print("HWE");
+  display.drawBitmap(Rahmen1, sizeof(Rahmen1));
+  delay(20000);
   display.update();
 
   /*
