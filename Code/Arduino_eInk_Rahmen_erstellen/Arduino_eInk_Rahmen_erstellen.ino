@@ -25,27 +25,90 @@
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
 #include <GxIO/GxIO.h>
 
+const char* ssid = "AndroidAP07A0";
+const char* password = "Philipp99";
+
+//Define NTP Client to get time
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP);
+
+//Variables to save data and time
+String formattedDate;
+String dayStamp;
+String timeStamp;
+
+
+
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
 
 
+//Variables to save data and time
+String formattedDate;
+String dayStamp;
+String timeStamp;
+
+
+
+
 void setup() {
   Serial.begin(115200);
-  //Serial.println();
-  //Serial.println("setup");
-
   display.init(115200); // enable diagnostic output on Serial
-
-  //display.fillScreen(GxEPD_WHITE); 
-  
-
-
   //Serial.println("setup done");
 
+
+//________________________________________________________________________
+//ab hier beginnt der RTC-Teil
+  
+WiFi.begin(ssid, password);
+ 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.println("Connecting to WiFi..");
+  }
+  
+    Serial.println("Connected to the WiFi network");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+
+    // Initialize a NTPClient to get time
+  timeClient.begin();
+  // Set offset time in seconds to adjust for your timezone, for example:
+  // GMT +1 = 3600
+  // GMT +8 = 28800
+  // GMT -1 = -3600
+  // GMT 0 = 0
+  timeClient.setTimeOffset(0);
 }
+}
+
+
+
 
 void loop() {
 
+  //RTC-Funktion aufrufen
+  RTC();
+
+
+//Abrufen ob innerhalb der Zeit oder in Ferien, 
+if(timeStamp <= 07:30:00 || timeStamp >= 18:00:00)
+{ 
+    DatenVorhanden();
+}
+
+//sonst normal ausgeben
+else
+  {
+    DatenVorhanden();
+  }
+ }
+
+
+
+void DatenVorhanden()
+{
+  //display.drawBitmap(Rahmen13, sizeof(Rahmen13));
   display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
   display.setTextSize(4);
   display.setTextColor(GxEPD_BLACK, GxEPD_WHITE);
@@ -73,7 +136,7 @@ void loop() {
   //Einheit
   display.setTextSize(2);
   display.setCursor(540,45);
-  display.print("5. EH");
+  display.print("9. EH");
   
   //Lehrer
   display.setTextSize(2);
@@ -99,38 +162,94 @@ void loop() {
   display.setTextSize(2);
   display.setCursor(500,327);
   display.print("HWE");
-  display.update();
 
-  /*
-  //display.setRotation(1);                // Display um 90° drehen
-  //display.setTextColor(GxEPD_RED);     // Schriftfarbe Grün
-  //display.print("Test");
-  //delay(2000);
-
-  // Rechteck mit weissem Hintergrund erstellen
-  //X-Position, Y-Position, Breite, Höhe, Farbe
-  //display.fillRect(0, 0, 384, 640, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h
-
-  //display.update();
-
-
-      
-  display.fillRect(0, 0, 370, 148, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Raum
-  display.fillRect(4, 4, 366, 265, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Raum (Rahmenstärke: 4 Pixel)
-
-  display.fillRect(0, 148, 409, 236, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Klasse
-  display.fillRect(4, 144, 405, 232, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Klasse (Rahmenstärke: 4 Pixel)
-
-  display.fillRect(409, 266, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Datum&Einheit
-  display.fillRect(413, 270, 401, 228, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Datum&Einheit (Rahmenstärke: 4 Pixel)
-
-  display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
-  display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
-
-  display.fillRect(409, 148, 231, 118, GxEPD_BLACK); //Xpos,Ypos,box-w,box-h //Feld_Lehrer
-  display.fillRect(413, 152, 397, 223, GxEPD_WHITE); //Xpos,Ypos,box-w,box-h //Rahmen-Feld_Lehrer (Rahmenstärke: 4 Pixel)
   
   display.update();
-  delay(500000000000);
-*/
+  delay(3600000);
+}
+
+
+void DatenNichtVorhanden()
+{
+  display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
+  display.setTextSize(4);
+  display.setTextColor(GxEPD_BLACK, GxEPD_WHITE);
+  
+  //aktuelle Klasse
+  display.setCursor(220,108);
+  display.print("-");
+  
+  //Raumnummer
+  display.setTextSize(4);
+  display.setCursor(220,295);
+  display.print("318");
+  
+  //Stammklasse
+  display.setTextSize(2);
+  display.setCursor(220,350);
+  display.print("5 BHELS");
+  
+  //Datum
+  display.setTextSize(2);
+  //x,y
+  display.setCursor(540,22);
+  display.print("07.12");
+  
+  //Einheit
+  display.setTextSize(2);
+  display.setCursor(540,45);
+  display.print("-");
+  
+  //Lehrer
+  display.setTextSize(2);
+  display.setCursor(540,108);
+  display.print("-");
+  
+  //Gegenstand
+  display.setTextSize(2);
+  display.setCursor(570,187);
+  display.print("-");
+  
+  //nächster Lehrer
+  display.setTextSize(2);
+  display.setCursor(500,285);
+  display.print("-");
+  
+  //nächste Klasse
+  display.setTextSize(2);
+  display.setCursor(500,305);
+  display.print("-");
+  
+  //nächstes Fach
+  display.setTextSize(2);
+  display.setCursor(500,327);
+  display.print("-");
+
+  
+  display.update();
+  delay(3600000);
+}
+
+void RTC()
+{
+while(!timeClient.update()) {
+    timeClient.forceUpdate();
+  }
+  // The formattedDate comes with the following format:
+  // 2018-05-28T16:00:13Z
+  // We need to extract date and time
+  formattedDate = timeClient.getFormattedDate();
+  Serial.println(formattedDate);
+
+  // Extract date
+  int splitT = formattedDate.indexOf("T");
+  dayStamp = formattedDate.substring(0, splitT);
+  /*Serial.print("DATE: ");
+  Serial.println(dayStamp);*/
+  // Extract time
+  timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
+  /*Serial.print("HOUR: ");
+  Serial.println(timeStamp);*/
+  delay(1000);
+}
 }
