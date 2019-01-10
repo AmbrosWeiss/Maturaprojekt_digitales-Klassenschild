@@ -22,25 +22,46 @@
 #include "img/Rahmen13.h"
 //#include GxEPD_BitmapExamples
 
+#include <Wire.h>
+
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
 #include <GxIO/GxIO.h>
+#include "RTClib.h"
+
+RTC_DS3231 rtc;
+//char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+char daysOfTheWeek[7][12] = {"So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"};
 
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
 
 
+
+
+
 void setup() {
   Serial.begin(115200);
-  //Serial.println();
-  //Serial.println("setup");
-
   display.init(115200); // enable diagnostic output on Serial
   //Serial.println("setup done");
 
+
+if (! rtc.begin()) {
+  Serial.println("Couldn't find RTC");
+  while (1);
 }
 
-void loop() {
+  rtc.adjust(DateTime(__DATE__, __TIME__));
   
+
+}
+
+
+
+void loop() {
+
+  DateTime now = rtc.now();
+
+  //display.drawBitmap(Rahmen13, sizeof(Rahmen13));
   display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
   display.setTextSize(4);
   display.setTextColor(GxEPD_BLACK, GxEPD_WHITE);
@@ -63,7 +84,49 @@ void loop() {
   display.setTextSize(2);
   //x,y
   display.setCursor(540,22);
-  display.print("07.12");
+
+  /*
+  display.print(daysOfTheWeek[now.dayOfTheWeek()]); //, "." now.month(), DEC, "." now.year(), DEC
+  display.print(":");
+  display.println(now.hour(),DEC);
+  display.print(":");
+  display.print(now.minute(),DEC);
+  display.print(":");
+  display.print(now.second(),DEC);
+  */
+  
+  //_____________Test-Bsp-von-Github_______________
+
+    display.print(now.year(), DEC);
+
+    display.print('/');
+
+    display.print(now.month(), DEC);
+
+    display.print('/');
+
+    display.print(now.day(), DEC);
+
+    display.print(" (");
+
+    display.print(daysOfTheWeek[now.dayOfTheWeek()]);
+
+    display.print(") ");
+
+    display.print(now.hour(), DEC);
+
+    display.print(':');
+
+    display.print(now.minute(), DEC);
+
+    display.print(':');
+
+    display.print(now.second(), DEC);
+
+    display.println();
+  //_________________________________
+  
+
   
   //Einheit
   display.setTextSize(2);
@@ -94,6 +157,11 @@ void loop() {
   display.setTextSize(2);
   display.setCursor(500,327);
   display.print("HWE");
+
+  
   display.update();
-  delay(200000);
+  delay(3600000);
+
+
+
 }
