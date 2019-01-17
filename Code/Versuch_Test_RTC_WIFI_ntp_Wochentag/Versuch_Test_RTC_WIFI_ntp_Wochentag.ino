@@ -22,15 +22,32 @@
 #include "img/Rahmen13.h"
 //#include GxEPD_BitmapExamples
 
-#include <Wire.h>
-
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
 #include <GxIO/GxIO.h>
-#include "RTClib.h"
 
-RTC_DS3231 rtc;
-//char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-char daysOfTheWeek[7][12] = {"So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"};
+//____________________RTC__________________
+#include <WiFi.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
+//für Wochentag
+char daysOfTheWeek[7] = {'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'};
+
+//Netzwerk (WLAN) Daten
+const char* ssid = "HUAWEI P20 lite";
+const char* password = "ambros123";
+
+//NTP-Client definieren um Zeit zu bekommen
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP);
+
+//Variablem um Uhrzeit und Datum zu speichern
+String formattedDate;
+String dayStamp;
+String timeStamp;
+
+//___________________RTC_ENDE______________
+
 
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
@@ -45,21 +62,51 @@ void setup() {
   //Serial.println("setup done");
 
 
-if (! rtc.begin()) {
-  Serial.println("Couldn't find RTC");
-  while (1);
-}
+  //_____________________RTC____________________________
 
-  rtc.adjust(DateTime(__DATE__, __TIME__));
-  
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    //Serial.print(".");
+  }
 
+  //start web server
+  WiFi.localIP();
+
+  //initialisiere NTPClient um Zeit zu bekommen
+  timeClient.begin();
+
+  //Offsett Zeit in Sekunden für die Richtige Zeitzone einistellen
+  //GMT +1 = 3600
+  timeClient.setTimeOffset(3600);
+//_______________________RTC_ENDE_________________________
 }
 
 
 
 void loop() {
 
-  DateTime now = rtc.now();
+//_____________________RTC________________________________
+
+//manchmal ruft der NTPClient 1970 auf, um sicherzustellen --> nicht passiert --> Update erzwingen
+  while(!timeClient.update()){
+    timeClient.forceUpdate();
+  }
+
+  //Das formatierte Datum ("formattedDate") kommt in folgendem Format an:
+  //2019-01-10T11:11:40Z
+  formattedDate = timeClient.getFormattedDate();
+
+  //Um Datum und Uhrzeit extra zu bekommen, müssen wir diese extrahieren
+  //Datum extrahieren
+  int splitT = formattedDate.indexOf("T");
+  dayStamp = formattedDate.substring(0, splitT);
+
+  //Uhrzeit extrahieren
+  timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
+  delay(1000);
+
+  //_______________________RTC_ENDE_________________________________
 
   //display.drawBitmap(Rahmen13, sizeof(Rahmen13));
   display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
@@ -79,54 +126,15 @@ void loop() {
   display.setTextSize(2);
   display.setCursor(220,350);
   display.print("5 BHELS");
-  
+
   //Datum
-  display.setTextSize(2);
+  display.setTextSize(1);
   //x,y
   display.setCursor(540,22);
+  display.print(dayStamp);
 
-  /*
-  display.print(daysOfTheWeek[now.dayOfTheWeek()]); //, "." now.month(), DEC, "." now.year(), DEC
-  display.print(":");
-  display.println(now.hour(),DEC);
-  display.print(":");
-  display.print(now.minute(),DEC);
-  display.print(":");
-  display.print(now.second(),DEC);
-  */
-  
-  //_____________Test-Bsp-von-Github_______________
-
-    display.print(now.year(), DEC);
-
-    display.print('/');
-
-    display.print(now.month(), DEC);
-
-    display.print('/');
-
-    display.print(now.day(), DEC);
-
-    display.print(" (");
-
-    display.print(daysOfTheWeek[now.dayOfTheWeek()]);
-
-    display.print(") ");
-
-    display.print(now.hour(), DEC);
-
-    display.print(':');
-
-    display.print(now.minute(), DEC);
-
-    display.print(':');
-
-    display.print(now.second(), DEC);
-
-    display.println();
-  //_________________________________
-  
-
+  //aktueller Wochentag
+  display.print(daysOfTheWeek[timeClient.getDay()]);
   
   //Einheit
   display.setTextSize(2);
