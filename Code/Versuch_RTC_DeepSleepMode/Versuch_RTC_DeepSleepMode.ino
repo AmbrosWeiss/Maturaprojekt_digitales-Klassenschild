@@ -59,9 +59,9 @@ RTC_DATA_ATTR int bootCount = 0;
 
 //___________________DEEP_SLEEP_ENDE______________
 
-//___________________AUFWACHZEIT_AM_WOCHENENDE____
+//___________________AUFWACHZEITEN_UNTER_DER_WOCHE________
 const char wakeuptimeWeekdays[18] = {0, 0, 0, 0, 0, 0, 55, 51, 46, 41, 46, 41, 36, 26, 21, 16, 06, 0};
-//                                   0  1  2  3  4  5   6   7   8   9  10  11  12  13  14  15  16  17
+//           Uhrzeit in Stunden:     0  1  2  3  4  5   6   7   8   9  10  11  12  13  14  15  16  17
 
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
@@ -214,30 +214,52 @@ if(daysOfTheWeek[now.dayOfTheWeek()] == daysOfTheWeek[4] && timeStamp >= neunUhr
   int schlafdauer = getSleepingTime();
   
   esp_sleep_enable_timer_wakeup(schlafdauer);
+  esp_deep_sleep_start();
 }
 
 
 int getSleepingTime()
 {
+  //ruft die aktuelle Stunde auf
   int aktuelleStunde = timeClient.getHours();
+  //ruft die aktuelle Minute auf
   int aktuelleMinute = timeClient.getMinutes();
+  //ruft den aktuellen Wochentag auf
+  int aktuellerWochentag = timeClient.getDay();
 
-  if(wakeuptimeWeekdays[aktuelleStunde + 1] >= aktuelleMinute)
-  {
-    int schlafdauer = wakeuptimeWeekdays[aktuelleStunde+1] - aktuelleMinute;
-    int schlafdauerSek = schlafdauer * 60;
-    return schlafdauerSek;
-  }
-  if(wakeuptimeWeekdays[aktuelleStunde+1] <= aktuelleMinute)
-  {
-    time_t aktuelleUhrzeit = tmConvert_t(timeClient.getYear(), timeClient.getMonth(), timeClient.getDayNumber(), timeClient.getHours(),timeClient.getMinutes(), timeClient.getSeconds());
-    int aktStd = timeClient.getHours();
-    time_t aufwachzeit = tmConvert_t(timeClient.getYear(), timeClient.getMonth(), timeClient.getDayNumber(), aktStd+1, wakeuptimeWeekdays[aktuelleStunde+1], timeClient.getSeconds());
 
-    int schlafdauer = aufwachzeit - aktuelleUhrzeit;
-    return schlafdauer;
+  //Wenn es Mo-Fr ist --> aktualiesierungszyklen nach dem Array wakeuptimeWeekdays
+  if(aktuellerWochentag > 0 && aktuellerWochentag <=5)
+  {
+      //wenn die vorgegebene Aufwachzeit in der aktuellen Stunde (z.B. Stunde 10) im Array ander Stelle (9+1) größer ist,
+      //als die aktuelle Zeit so wird die Vorgegebene minus der aktuellen Zeit gerechnet 
+      //Beispiel: vorg. 10:46 / akt. 10:30 --> 10:46 > 10:30 --> 46-30 = 16 --> 16 * 60 --> 960 Sekunden schlafen legen
+      if(wakeuptimeWeekdays[aktuelleStunde + 1] >= aktuelleMinute)
+      {
+        int schlafdauer = wakeuptimeWeekdays[aktuelleStunde+1] - aktuelleMinute;
+        int schlafdauerSek = schlafdauer * 60;
+        return schlafdauerSek;
+      }
+      //vorgegebene Zeit kleiner als akt. Zeit, Stunde aber eine anderere (Bsp: vorg. 10:46 / akt. = 10:50) --> stunde wird erhöht, weil er somit erst in der nächsten Stunde
+      //in diesem Beispiel um 11:41 aufwachen muss --> die Werte werden in echo-Code umgewandelt und wieder die vorgegebene - aktuelle
+      if(wakeuptimeWeekdays[aktuelleStunde+1] <= aktuelleMinute)
+      {
+        //Uhrzeit und Datum in echo-Code
+        time_t aktuelleUhrzeit = tmConvert_t(timeClient.getYear(), timeClient.getMonth(), timeClient.getDayNumber(), timeClient.getHours(),timeClient.getMinutes(), timeClient.getSeconds());
+        int aktStd = timeClient.getHours();
+        time_t aufwachzeit = tmConvert_t(timeClient.getYear(), timeClient.getMonth(), timeClient.getDayNumber(), aktStd+1, wakeuptimeWeekdays[aktuelleStunde+1], timeClient.getSeconds());
+
+        //wie lange er schlafen darf
+        //Wert sollte schon in Sekunden sein --> weil echo sekunden zurück gibt
+        int schlafdauer = aufwachzeit - aktuelleUhrzeit;
+        return schlafdauer;
+      }
   }
-  
+
+  else
+  {
+    //wenn Samstag, SOnntag, Freitag nach 17:00 oder Ferien --> wieder so lange schlafen legen, bis er aufwachen darf
+  }
 }
 
 
