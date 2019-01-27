@@ -1,5 +1,5 @@
 //reguläres Programm
-#include <GxEPD.h>
+#include "GxEPD.h"
 //#include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 
@@ -17,21 +17,24 @@
 //#include <GxGDEW042Z15/GxGDEW042Z15.h>    // 4.2" b/w/r
 //#include <GxGDEW0583T7/GxGDEW0583T7.h>    // 5.83" b/w
 //#include <GxGDEW075T8/GxGDEW075T8.h>      // 7.5" b/w
-#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
+//eigentlich das Richtige, aber da ich eine eigene Funktion geschrieben habe, benutze ich diese lokal
+//#include <GxGDEW075Z09/GxGDEW075Z09.h>    // 7.5" b/w/r
 
+#include "GxEPD-master-modifiziert/src/GxGDEW075Z09/GxGDEW075Z09_modifiziert.h"    // 7.5" b/w/r
+
+//Einfügen der Bitmap
 #include "img/Rahmen13.h"
-//#include GxEPD_BitmapExamples
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
 #include <GxIO/GxIO.h>
 
 //____________________RTC__________________
 #include <WiFi.h>
-#include <NTPClientSeparated.h>
+#include "NTPClientSeparated/NTPClientSeparated.h"
 #include <WiFiUdp.h>
 
 //damit Uhrzeit/Datum in epoch code umwandeln
-#include <Time.h>
+#include "Time-master/Time.h"
 
 //für Wochentag
 char daysOfTheWeek[7] = {'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'};
@@ -51,6 +54,9 @@ String timeStamp;
 
 //___________________RTC_ENDE______________
 
+
+
+
 //___________________DEEP_SLEEP____________
 
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
@@ -59,9 +65,13 @@ RTC_DATA_ATTR int bootCount = 0;
 
 //___________________DEEP_SLEEP_ENDE______________
 
-//___________________AUFWACHZEITEN_UNTER_DER_WOCHE________
+
+
+
+//___________________AUFWACHZEITEN_UNTER_DER_WOCHE___________________________________________________________
 const char wakeuptimeWeekdays[18] = {0, 0, 0, 0, 0, 0, 55, 51, 46, 41, 46, 41, 36, 26, 21, 16, 06, 0};
 //           Uhrzeit in Stunden:     0  1  2  3  4  5   6   7   8   9  10  11  12  13  14  15  16  17
+//____________________________________________________________________________________________________________
 
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
@@ -119,8 +129,9 @@ void loop() {
   //Uhrzeit extrahieren
   timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
   delay(1000);
-
   //_______________________RTC_ENDE_________________________________
+
+
 
   //display.drawBitmap(Rahmen13, sizeof(Rahmen13));
   display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
@@ -212,7 +223,6 @@ if(daysOfTheWeek[now.dayOfTheWeek()] == daysOfTheWeek[4] && timeStamp >= neunUhr
 }*/
 
   int schlafdauer = getSleepingTime();
-  
   esp_sleep_enable_timer_wakeup(schlafdauer);
   esp_deep_sleep_start();
 }
@@ -224,7 +234,7 @@ int getSleepingTime()
   int aktuelleStunde = timeClient.getHours();
   //ruft die aktuelle Minute auf
   int aktuelleMinute = timeClient.getMinutes();
-  //ruft den aktuellen Wochentag auf
+  //ruft den aktuellen Wochentag (Montag, ...)auf
   int aktuellerWochentag = timeClient.getDay();
 
 
@@ -247,6 +257,10 @@ int getSleepingTime()
         //Uhrzeit und Datum in echo-Code
         time_t aktuelleUhrzeit = tmConvert_t(timeClient.getYear(), timeClient.getMonth(), timeClient.getDayNumber(), timeClient.getHours(),timeClient.getMinutes(), timeClient.getSeconds());
         int aktStd = timeClient.getHours();
+
+        //gibt an, wann er wieder aufwachen muss (gilt nur für unter der Woche)          
+        //"aktStd+1", weil erst in der nächsten Stunde wieder aufwachen (oben angegeben)
+        //"wakeuptimeWeekdays[aktuelleStunde+1]", so erhält man die Minute, wann er in der nächsten Stunde aufwachen muss
         time_t aufwachzeit = tmConvert_t(timeClient.getYear(), timeClient.getMonth(), timeClient.getDayNumber(), aktStd+1, wakeuptimeWeekdays[aktuelleStunde+1], timeClient.getSeconds());
 
         //wie lange er schlafen darf
@@ -266,6 +280,7 @@ int getSleepingTime()
 //Funktion, um ein Datum bzw Uhrzeit in einen epoch Code zu wandeln
 time_t tmConvert_t(int YYYY, byte MM, byte DD, byte hh, byte mm, byte ss)
 {
+ 
   tmElements_t tmSet;
   tmSet.Year = YYYY - 1970;
   tmSet.Month = MM;
@@ -273,7 +288,26 @@ time_t tmConvert_t(int YYYY, byte MM, byte DD, byte hh, byte mm, byte ss)
   tmSet.Hour = hh;
   tmSet.Minute = mm;
   tmSet.Second = ss;
-  return makeTime(tmSet); 
+  return makeTime(tmSet);
+  
+
+/*
+    struct tm t;
+    time_t t_of_day;
+
+    t.tm_year = YYYY-1900;
+    t.tm_mon = MM;           // Month, 0 - jan
+    t.tm_mday = DD;          // Day of the month
+    t.tm_hour = hh;
+    t.tm_min = mm;
+    t.tm_sec = ss;
+    t.tm_isdst = 1;        // Is DST on? 1 = yes, 0 = no, -1 = unknown
+    t_of_day = mktime(&t);
+
+    //display.print("seconds since the Epoch:", (long) t_of_day)
+    return t_of_day;
+*/
+
 }
 
 
