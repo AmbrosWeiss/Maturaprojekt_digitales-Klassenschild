@@ -1,0 +1,771 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C5F80730-F44F-4478-BDAE-6634EFC2CA88}</ProjectGuid>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectName>DeepSleep</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\DeepSleep;$(ProjectDir)..\..\Software\Arduino\libraries\GxEPD-master\src;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\libraries\SPI\src;$(ProjectDir)..\..\Software\Arduino\libraries\Adafruit-GFX-Library-master;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\libraries\WiFi\src;$(ProjectDir)..\..\Software\Arduino\libraries;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\libraries;$(ProjectDir)..\..\Software\Arduino\sketch\libraries;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\cores\esp32;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\cores\esp32\libb64;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\variants\esp32;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\config;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\bluedroid;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\app_trace;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\app_update;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\bootloader_support;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\bt;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\driver;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\esp32;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\esp_adc_cal;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\ethernet;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\fatfs;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\freertos;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\heap;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\jsmn;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\log;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\mdns;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\mbedtls;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\mbedtls_port;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\newlib;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\nvs_flash;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\openssl;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\spi_flash;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\sdmmc;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\spiffs;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\tcpip_adapter;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\ulp;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\vfs;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\wear_levelling;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\xtensa-debug-module;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\coap;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\console;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\expat;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\json;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\lwip;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\nghttp;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\soc;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include\wpa_supplicant;$(ProjectDir)..\..\Software\Arduino\hardware\espressif\esp32\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.DeepSleep.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__ESP32_ESp32__;__ESP32_ESP32__;ESP_PLATFORM;HAVE_CONFIG_H;F_CPU=240000000L;ARDUINO=10805;ARDUINO_ESP32_DEV;ARDUINO_ARCH_ESP32;ESP32;CORE_DEBUG_LEVEL=0;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="VisualMicro" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DeepSleep.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GxEPD-master-modifiziert\examples\GxEPD_Example\IMG_0001.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\GxEPD-master\examples\GxEPD_Example\IMG_0001.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxEPD.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxFont_GFX.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDE0213B1\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDE0213B1\GxGDE0213B1.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEH029A1\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEH029A1\GxGDEH029A1.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEP015OC1\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEP015OC1\GxGDEP015OC1.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0154Z04\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0154Z04\BitmapWaveshare.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0154Z04\GxGDEW0154Z04.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0154Z17\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0154Z17\GxGDEW0154Z17.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0213Z16\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0213Z16\BitmapWaveshare.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0213Z16\GxGDEW0213Z16.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW027C44\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW027C44\GxGDEW027C44.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW027W3\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW027W3\BitmapWaveshare.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW027W3\GxGDEW027W3.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW029Z10\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW029Z10\BitmapWaveshare.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW029Z10\GxGDEW029Z10.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW042T2\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW042T2\GxGDEW042T2.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW042Z15\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW042Z15\BitmapWaveshare.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW042Z15\GxGDEW042Z15.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0583T7\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW0583T7\GxGDEW0583T7.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW075T8\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW075T8\GxGDEW075T8.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW075Z09\BitmapExamples.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW075Z09\BitmapPicture_3C.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxGDEW075Z09\GxGDEW075Z09_modifiziert.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxIO\GxIO.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\GxIO\GxIO_SPI\GxIO_SPI.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_add.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_add_image.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_add_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_center.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_image_center.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_image_left.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_image_none.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_image_right.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_justify.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_left.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_align_right.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_arrow_down.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_arrow_left.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_arrow_right.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_arrow_up.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_aside.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_attachment.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_audio.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_bell.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_block.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_bold.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_book.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_bookmark.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_bookmark_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_briefcase.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_bug.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_calendar.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_camera.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_caption.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cart.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_chat.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_checkmark.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_checkmark_circle.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_chevron_down.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_chevron_left.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_chevron_right.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_chevron_up.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_clear_formatting.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_clipboard.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cloud.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cloud_download.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cloud_upload.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_code.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cog.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_comment.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_computer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_create.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_credit_card.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_crop.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cross.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cross_circle.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_cross_small.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_custom_post_type.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_dropdown.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_ellipsis.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_ellipsis_circle.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_external.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_flag.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_flip_horizontal.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_flip_vertical.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_folder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_folder_multiple.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_fullscreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_fullscreen_exit.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_globe.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_grid.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_heading.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_heading_h1.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_heading_h2.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_heading_h4.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_heart.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_heart_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_help.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_help_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_history.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_house.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_image.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_image_multiple.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_indent_left.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_indent_right.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_info.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_info_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_ink.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_institution.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_italic.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_layout.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_layout_blocks.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_link.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_link_break.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_list_checkmark.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_list_unordered.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_location.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_lock.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_mail.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_mention.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_menu.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_menus.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_microphone.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_minus.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_minus_small.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_money.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_nametag.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_next_page.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_notice.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_notice_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_not_visible.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_offline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_pages.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_pause.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_pencil.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_phone.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_play.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_plugins.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_plus.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_plus_small.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_popout.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_posts.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_print.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_product.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_product_downloadable.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_product_external.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_product_virtual.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_reader_follow.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_reader_following.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_read_more.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_reblog.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_redo.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_refresh.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_reply.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_resize.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_rotate.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_scheduled.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_search.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_share_computer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_share_ios.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_shipping.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_sign_out.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_spam.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_speaker.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_star.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_star_outline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_stats.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_stats_alt.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_status.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_sync.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_tablet.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_tag.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_text_color.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_themes.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_thumbs_up.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_time.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_trash.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_trophy.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_types.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_underline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_undo.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_user.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_user_add.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_user_circle.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_video.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_video_camera.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GxEPD-master-modifiziert\src\imglib\gridicons_visible.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="img\Rahmen13.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="img\Rahmen14.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="img\Rahmen_Beispiel.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="IMG_0001.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="NTPClientSeparated\NTPClientSeparated.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Time-master\Time.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Time-master\TimeLib.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="__vm\.DeepSleep.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxEPD.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxFont_GFX.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDE0213B1\GxGDE0213B1.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEH029A1\GxGDEH029A1.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEP015OC1\GxGDEP015OC1.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW0154Z04\GxGDEW0154Z04.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW0154Z17\GxGDEW0154Z17.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW0213Z16\GxGDEW0213Z16.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW027C44\GxGDEW027C44.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW027W3\GxGDEW027W3.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW029Z10\GxGDEW029Z10.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW042T2\GxGDEW042T2.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW042Z15\GxGDEW042Z15.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW0583T7\GxGDEW0583T7.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW075T8\GxGDEW075T8.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxGDEW075Z09\GxGDEW075Z09_modifiziert.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxIO\GxIO.cpp" />
+    <ClCompile Include="GxEPD-master-modifiziert\src\GxIO\GxIO_SPI\GxIO_SPI.cpp" />
+    <ClCompile Include="NTPClientSeparated\NTPClientSeparated.cpp" />
+    <ClCompile Include="Time-master\DateStrings.cpp" />
+    <ClCompile Include="Time-master\Time.cpp" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
