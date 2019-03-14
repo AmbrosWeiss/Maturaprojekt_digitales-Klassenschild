@@ -3,6 +3,8 @@
 //#include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 
+
+
 // select the display class to use, only one
 //#include <GxGDEP015OC1/GxGDEP015OC1.h>    // 1.54" b/w
 //#include <GxGDEW0154Z04/GxGDEW0154Z04.h>  // 1.54" b/w/r 200x200
@@ -28,11 +30,25 @@
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
 #include <GxIO/GxIO.h>
 
+void Ausgabe();
+unsigned long int getSleepingTime();
+void callback(char* topic, byte* payload, unsigned int length);
+void print_wakeup_reason();
+void reconnect();
+time_t tmConvert_t(int YYYY, byte MM, byte DD, byte hh, byte mm, byte ss);
+
+
+
+//___________________DEEP_SLEEP____________
+#define uS_TO_S_FACTOR 1000000
+RTC_DATA_ATTR int bootCount = 0;
+//___________________DEEP_SLEEP_ENDE______________
+
+
+
 //____________________RTC__________________
-//#include "WiFi-Library-espressiv/src/WiFi.h"
 #include <WiFi.h>
 #include <NTPClientSeparated.h>
-//#include <WiFi-Library-espressiv/src/WiFiUdp.h>
 
 //damit Uhrzeit/Datum in epoch code umwandeln
 #include "Time.h"
@@ -52,8 +68,10 @@ NTPClient timeClient(ntpUDP);
 String formattedDate;
 String dayStamp;
 String timeStamp;
-
 //___________________RTC_ENDE______________
+
+
+
 
 //__________________MQTT__________
 
@@ -61,33 +79,32 @@ String timeStamp;
 WiFiClient espClient;
 PubSubClient client(espClient);
 char* mqttServer ="192.168.43.248";
- const int mqttPort = 1883;
- String Nachricht[100];             // Array für Nachricht 
- int a = 0;                       // Um in die If-Bedingung im Main zu springen
- char string[300];
- int x;
-char* id="40";                     //id der Raumnummer
+const int mqttPort = 1883;
 
+// Array für Nachricht 
+String Nachricht[100];   
 
+// Um in die If-Bedingung im Main zu springen          
+int a = 0;                       
+char string[300];
+int x;
+
+//id der Raumnummer
+char* id = "40";       
+//char* hilfe= *id;              
 //_______________MQTT_ENDE
 
 
 
-//___________________DEEP_SLEEP____________
 
-#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  60        /* Time ESP32 will go to sleep (in seconds) */
-RTC_DATA_ATTR int bootCount = 0;
-
-//___________________DEEP_SLEEP_ENDE______________
 
 
 
 
 //___________________AUFWACHZEITEN_UNTER_DER_WOCHE___________________________________________________________
-const char wakeuptimeWeekdays[18] = {0, 0, 0, 0, 0, 0, 55, 51, 46, 41, 46, 41, 36, 26, 21, 16, 06, 0};
-//           Uhrzeit in Stunden:     0  1  2  3  4  5   6   7   8   9  10  11  12  13  14  15  16  17
-//____________________________________________________________________________________________________________
+const char wakeuptimeWeekdays[24] = {0, 0, 0, 0, 0, 0, 55, 51, 46, 41, 46, 41, 36, 26, 21, 16, 06, 0,  0, 0, 0, 0, 0, 0};
+//           Uhrzeit in Stunden:     0  1  2  3  4  5   6   7   8   9  10  11  12  13  14  15  16  17 18 19 20 21 22 23
+//___________________________________________________________________________________________________________
 
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
@@ -103,11 +120,10 @@ void setup() {
 
 
   //_____________________RTC____________________________
-
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    //Serial.print(".");
+    Serial.print("WiFi gestartet");
   }
   
   //start web server
@@ -121,15 +137,42 @@ void setup() {
   timeClient.setTimeOffset(3600);
 //_______________________RTC_ENDE_________________________
 
-//_______________________MQTT_____________________________
 
+
+
+
+//_______________________DEEP_SLEEP_______________________
+  
+  //Increment boot number and print it every reboot
+  ++bootCount;
+  Serial.println("Boot number: " + String(bootCount));
+
+  Ausgabe();
+
+  //gibt den Aufwachgrund für den ESP32 aus
+  print_wakeup_reason();
+
+  //Wandelt die angegebene Zeit in µs um
+  unsigned long int schlafdauer = getSleepingTime();
+  uint64_t aufwachzeit = schlafdauer * uS_TO_S_FACTOR;
+  esp_sleep_enable_timer_wakeup(aufwachzeit);
+  Serial.println("\nSetup ESP32 to sleep for every " + String(schlafdauer) +  " Seconds");
+  //startet den DeepSleepMode
+  esp_deep_sleep_start();
+//_____________________DEEP_SLEEP_ENDE____________________
+
+
+
+
+//_______________________MQTT______________________________________
 Serial.println(WiFi.localIP()); 
 
     client.setServer(mqttServer, mqttPort);
     client.setCallback(callback);
 
 
-      while (!client.connected()) {
+   while (!client.connected()) 
+   {
     Serial.println("Connecting to MQTT...");
  
     if (client.connect("ESP32Client")) {
@@ -138,145 +181,33 @@ Serial.println(WiFi.localIP());
  
     } 
     else {
- 
       Serial.print("failed with state ");
       Serial.println(client.state());
       delay(2000);
- 
     }
-      }
-
-   client.publish("HTL/Klasse/id", (const char*)id); // Anfrage für die Klasse mit der Id
-   client.subscribe("HTL/Klasse");                   // Angefordere Daten werden Auf HTL/Klasse gepublished
-
-
-//____________________MQTT_ENDE
-}
-
-
-
-
-
-
-long int getSleepingTime()
-{
-  //ruft die aktuelle Stunde auf
-  int aktuelleStunde = timeClient.getHours();
-  //ruft die aktuelle Minute auf
-  int aktuelleMinute = timeClient.getMinutes();
-  //ruft den aktuellen Wochentag (Montag, ...)auf
-  int aktuellerWochentag = timeClient.getDay();
-
-  unsigned long sec = timeClient.getEpochTime();
-
-
-  //Wenn es Mo-Fr ist --> aktualiesierungszyklen nach dem Array wakeuptimeWeekdays
-  if(aktuellerWochentag > 0 && aktuellerWochentag <=5)
-  {
-      //wenn die vorgegebene Aufwachzeit in der aktuellen Stunde (z.B. Stunde 10) im Array ander Stelle (9+1) größer ist,
-      //als die aktuelle Zeit so wird die Vorgegebene minus der aktuellen Zeit gerechnet 
-      //Beispiel: vorg. 10:46 / akt. 10:30 --> 10:46 > 10:30 --> 46-30 = 16 --> 16 * 60 --> 960 Sekunden schlafen legen
-      if(wakeuptimeWeekdays[aktuelleStunde + 1] >= aktuelleMinute)
-      {
-        int schlafdauer = wakeuptimeWeekdays[aktuelleStunde+1] - aktuelleMinute;
-        int schlafdauerSek = schlafdauer * 60;
-        return schlafdauerSek;
-      }
-      //vorgegebene Zeit kleiner als akt. Zeit, Stunde aber eine anderere (Bsp: vorg. 10:46 / akt. = 10:50) --> stunde wird erhöht, weil er somit erst in der nächsten Stunde
-      //in diesem Beispiel um 11:41 aufwachen muss --> die Werte werden in echo-Code umgewandelt und wieder die vorgegebene - aktuelle
-      if(wakeuptimeWeekdays[aktuelleStunde+1] <= aktuelleMinute)
-      {
-        //Uhrzeit und Datum in echo-Code
-        /*time_t*/ long int aktuelleUhrzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec), timeClient.getHours(),timeClient.getMinutes(), timeClient.getSeconds());
-        int aktStd = timeClient.getHours();
-
-        //gibt an, wann er wieder aufwachen muss (gilt nur für unter der Woche)          
-        //"aktStd+1", weil erst in der nächsten Stunde wieder aufwachen (oben angegeben)
-        //"wakeuptimeWeekdays[aktuelleStunde+1]", so erhält man die Minute, wann er in der nächsten Stunde aufwachen muss
-        /*time_t*/ long int aufwachzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec), aktStd+1, wakeuptimeWeekdays[aktuelleStunde+1], timeClient.getSeconds());
-
-        //wie lange er schlafen darf
-        //Wert sollte schon in Sekunden sein --> weil echo sekunden zurück gibt
-        long int schlafdauer = aufwachzeit - aktuelleUhrzeit;
-        return schlafdauer;
-      }
   }
-
-  else
-  {
-    //wenn Samstag, SOnntag, Freitag nach 17:00 oder Ferien --> wieder so lange schlafen legen, bis er aufwachen darf
-  }
-}
-
-
-//Funktion, um ein Datum bzw Uhrzeit in einen epoch Code zu wandeln
-time_t tmConvert_t(int YYYY, byte MM, byte DD, byte hh, byte mm, byte ss)
-{
- 
-  tmElements_t tmSet;
-  tmSet.Year = YYYY - 1970;
-  tmSet.Month = MM;
-  tmSet.Day = DD;
-  tmSet.Hour = hh;
-  tmSet.Minute = mm;
-  tmSet.Second = ss;
-  return makeTime(tmSet);
   
-
-/*
-    struct tm t;
-    time_t t_of_day;
-
-    t.tm_year = YYYY-1900;
-    t.tm_mon = MM;           // Month, 0 - jan
-    t.tm_mday = DD;          // Day of the month
-    t.tm_hour = hh;
-    t.tm_min = mm;
-    t.tm_sec = ss;
-    t.tm_isdst = 1;        // Is DST on? 1 = yes, 0 = no, -1 = unknown
-    t_of_day = mktime(&t);
-
-    //display.print("seconds since the Epoch:", (long) t_of_day)
-    return t_of_day;
-*/
-
+   // Anfrage für die Klasse mit der Id
+   client.publish("HTL/Klasse/id", (const char*)id); 
+   // Angefordere Daten werden Auf HTL/Klasse gepublished       
+   client.subscribe("HTL/Klasse");                   
+//____________________MQTT_ENDE_____________________________________
 }
 
 
-void loop() {
-
-//_____________________RTC________________________________
-
-//manchmal ruft der NTPClient 1970 auf, um sicherzustellen --> nicht passiert --> Update erzwingen
-  while(!timeClient.update()){
-    timeClient.forceUpdate();
-  }
-
-  //Das formatierte Datum ("formattedDate") kommt in folgendem Format an:
-  //2019-01-10T11:11:40Z
-  formattedDate = timeClient.getFormattedDate();
-
-  //Um Datum und Uhrzeit extra zu bekommen, müssen wir diese extrahieren
-  //Datum extrahieren
-  int splitT = formattedDate.indexOf("T");
-  dayStamp = formattedDate.substring(0, splitT);
-
-  //Uhrzeit extrahieren
-  timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
-  delay(1000);
-  //_______________________RTC_ENDE_________________________________
 
 
 
-  //display.drawBitmap(Rahmen13, sizeof(Rahmen13));
-  display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
-  display.setTextSize(4);
-  display.setTextColor(GxEPD_BLACK, GxEPD_WHITE);
 
-   if (!client.connected()) {
-    reconnect();
-  }
 
+
+
+
+
+
+
+void loop() 
+{
   /*__________NACHRICHTen ARRAY_____
   
   ES MUSS IMMER +1 GERECHNET WERDEN
@@ -293,9 +224,36 @@ void loop() {
   Nachricht[9] nKlasse
   Nachricht[10] nLehrer
   Nachricht[11]nFach
-
   _______________________________
 */
+}
+
+void Ausgabe()
+{
+  //_____________________RTC________________________________
+//manchmal ruft der NTPClient 1970 auf, um sicherzustellen --> nicht passiert --> Update erzwingen
+  while(!timeClient.update()){
+    timeClient.forceUpdate();
+  }
+  //_______________________RTC_ENDE_________________________________
+
+
+
+  //die Bitmap, also der Rahmen wird in den Black-Buffer gespeichert, in welchem in weiterer Folge auch der Text gespeichert wird
+  //der Black-Buffer wird dann mit "display.update" ausgegeben
+  //display.drawBitmap(Rahmen13, sizeof(Rahmen13));
+  display.BitmapToBuffer(Rahmen13, sizeof(Rahmen13));
+  display.setTextSize(4);
+  display.setTextColor(GxEPD_BLACK, GxEPD_WHITE);
+
+   if (!client.connected()) {
+    reconnect();
+  }
+
+  
+
+
+
 
 if(a==1){
 
@@ -327,9 +285,9 @@ if(a==1){
   display.print(" ");
   
   display.print(timeClient.getDayNumber(sec));
-  display.print("-");
+  display.print(".");
   display.print(timeClient.getMonth(sec));
-  display.print("-");
+  display.print(".");
   display.print(timeClient.getYear(sec));
   
 
@@ -365,24 +323,276 @@ if(a==1){
   display.print(Nachricht[12]);
 
   display.update();
-  delay(200000);
+  delay(200);
 
   a=0;
 
 }
-  
-  
 
   client.loop();
-  /*
-  long int schlafdauer = getSleepingTime();
-  schlafdauer=schlafdauer * 1000000;
+ 
+ /* long int schlafdauer = getSleepingTime();
+  int schlafdauerMicro = schlafdauer * 1000000;
   Serial.print("Schlafdauer: ");
-  Serial.print(schlafdauer);
-  esp_sleep_enable_timer_wakeup(schlafdauer);
+  Serial.print(schlafdauerMicro);
+  esp_sleep_enable_timer_wakeup(schlafdauerMicro);
   esp_deep_sleep_start();
-  */
+*/
 }
+
+
+
+
+
+
+unsigned long int getSleepingTime()
+{
+  unsigned long int schlafdauer;
+  //ruft die aktuelle Stunde auf
+  int aktuelleStunde = timeClient.getHours();
+  int aktStd = timeClient.getHours();
+  Serial.print("\n\n");
+  Serial.print(aktuelleStunde);
+  //ruft die aktuelle Minute auf
+  int aktuelleMinute = timeClient.getMinutes();
+  Serial.print(aktuelleMinute);
+  Serial.print(timeClient.getSeconds());
+  Serial.print("\n\n");
+  //ruft den aktuellen Wochentag (Montag, ...)auf
+  int aktuellerWochentag = timeClient.getDay();
+
+
+
+  //aktuelle Uhrzeit und Datum in Epoch-Format
+  unsigned long sec = timeClient.getEpochTime();
+
+  long int aktuelleUhrzeit = timeClient.getEpochTime();
+
+
+
+//_______________________________________Sommerferien________________________________________________________________________________
+
+  
+  unsigned long int Sommerferienbeginn = tmConvert_t(timeClient.getYear(sec), '07' /*Monat*/, '14' /*Tag*/, '08' /*Stunde*/, '00' /*Minute*/, '00' /*Sekunden*/);
+  unsigned long int Sommerferienende = tmConvert_t(timeClient.getYear(sec), '09' /*Monat*/, '08' /*Tag*/, '07' /*Stunde*/, '51' /*Minute*/, '00' /*Sekunden*/);
+
+  //Sommerferien
+  if(aktuelleUhrzeit >= Sommerferienbeginn && aktuelleUhrzeit <= Sommerferienende)
+  {
+        schlafdauer = Sommerferienende - aktuelleUhrzeit;
+        return schlafdauer;
+  }
+//_______________________________________Sommerferien________________________________________________________________________________
+
+
+
+
+//_______________________________________Weihnachtsferien_______________________________________________________________________________
+
+  //Heiliger Abend
+  unsigned long int Weihnachtsferienbeginn = tmConvert_t(timeClient.getYear(sec), '12' /*Monat*/, '24' /*Tag*/, '08' /*Stunde*/, '00' /*Minute*/, '00' /*Sekunden*/);
+  //Tag nach hl. 3 Könige
+  unsigned long int Weihnachtsferienende = tmConvert_t(timeClient.getYear(sec), '01' /*Monat*/, '07' /*Tag*/, '07' /*Stunde*/, '51' /*Minute*/, '00' /*Sekunden*/);
+
+  //Sommerferien
+  if(aktuelleUhrzeit >= Weihnachtsferienbeginn && aktuelleUhrzeit <= Weihnachtsferienende)
+  {
+        schlafdauer = Sommerferienende - aktuelleUhrzeit;
+        return schlafdauer;
+  }
+//_______________________________________Weihnachtsferien________________________________________________________________________________
+
+
+
+
+
+//_______________________________________10_Räume_leer_-->_Vermutung:freier_Tag_erwacht_am_Folgetag______________________________________
+  //Wenn es Mo-Fr ist --> Aktualiesierungszyklen nach dem Array wakeuptimeWeekdays
+  if(aktuellerWochentag > 0 && aktuellerWochentag <=5)
+  {
+     //wenn Ferien --> Klassen leer --> schläft weiter
+     int Fach = 0;
+     while(Fach == 0)
+      {
+        //Abfrage ob die Räume leer sind
+          char* hilfe = "39";
+          client.publish("HTL/Klasse/id", (const char*)hilfe);
+          client.subscribe("HTL/Klasse");
+          String Raum1 = Nachricht[12];
+      
+          char* hilfe1 = "38";
+          client.publish("HTL/Klasse/id", (const char*)hilfe1);
+          client.subscribe("HTL/Klasse");
+          String Raum2 = Nachricht[12];
+      
+          char* hilfe2 = "37";
+          client.publish("HTL/Klasse/id", (const char*)hilfe2);
+          client.subscribe("HTL/Klasse");
+          String Raum3 = Nachricht[12];
+      
+          char* hilfe3 = "36";
+          client.publish("HTL/Klasse/id", (const char*)hilfe3);
+          client.subscribe("HTL/Klasse");
+          String Raum4 = Nachricht[12];
+      
+          char* hilfe4 = "35";
+          client.publish("HTL/Klasse/id", (const char*)hilfe4);
+          client.subscribe("HTL/Klasse");
+          String Raum5 = Nachricht[12];
+      
+          char* hilfe5 = "34";
+          client.publish("HTL/Klasse/id", (const char*)hilfe5);
+          client.subscribe("HTL/Klasse");
+          String Raum6 = Nachricht[12];
+        
+        
+    if(Raum1 == Raum2 && Raum2 == Raum3 && Raum3 == Raum4 && Raum4 == Raum5 && Raum5 == Raum6)
+        {
+        // exakte aktuelle Uhrzeit ausrechnen, damit die Schlafdauer möglichst genau ist
+        aktuelleUhrzeit = timeClient.getEpochTime();   
+                
+        //wenn in allen Räumen nichts angezeigt wird, dann soll er bis um 08:00 am Folgetag schlafen
+        unsigned long int aufwachzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec)+1, '07', '55', '00');
+
+        //Wert sollte schon in Sekunden sein --> weil echo sekunden zurück gibt
+        schlafdauer = aufwachzeit - aktuelleUhrzeit;
+        return schlafdauer;
+        }
+        else{
+          Fach = 1;
+        }
+
+       //Wieder auf ursprüngliche KlassenID setzen
+       client.publish("HTL/Klasse/id", (const char*)id); 
+       // Angefordere Daten werden Auf HTL/Klasse gepublished       
+       client.subscribe("HTL/Klasse");              
+    }
+//_______________________________________10_Räume_leer_-->_frei________________________________________________________________________________
+
+
+
+
+//_______________________________________normaler_Schultag__________________________________________________________________________
+
+      //wenn die vorgegebene Aufwachzeit in der aktuellen Stunde (z.B. Stunde 10) im Array ander Stelle (9+1) größer ist,
+      //als die aktuelle Zeit so wird die Vorgegebene minus der aktuellen Zeit gerechnet 
+      //Beispiel: vorg. 10:46 / akt. 10:30 --> 10:46 > 10:30 --> 46-30 = 16 --> 16 * 60 --> 960 Sekunden schlafen legen
+      if(wakeuptimeWeekdays[aktuelleStunde /*+ 1*/] >= aktuelleMinute)
+      {
+        int schlafdauerMin = wakeuptimeWeekdays[aktuelleStunde /*+1*/] - aktuelleMinute;
+        schlafdauer = schlafdauerMin * 60;
+        return schlafdauer;
+      }
+
+      
+      //vorgegebene Zeit kleiner als akt. Zeit, Stunde aber eine anderere (Bsp: vorg. 10:46 / akt. = 10:50) --> stunde wird erhöht, weil er somit erst in der nächsten Stunde
+      //in diesem Beispiel um 11:41 aufwachen muss --> die Werte werden in echo-Code umgewandelt und wieder die vorgegebene - aktuelle
+      if(wakeuptimeWeekdays[aktuelleStunde/*+1*/] <= aktuelleMinute)
+      {
+        //Uhrzeit und Datum in echo-Code
+        ///*time_t*/ long int aktuelleUhrzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec), timeClient.getHours(),timeClient.getMinutes(), timeClient.getSeconds());
+
+        //gibt an, wann er wieder aufwachen muss (gilt nur für unter der Woche)          
+        //"aktStd+1", weil erst in der nächsten Stunde wieder aufwachen (oben angegeben)
+        //"wakeuptimeWeekdays[aktuelleStunde+1]", so erhält man die Minute, wann er in der nächsten Stunde aufwachen muss
+        /*time_t*/ long int aufwachzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec), aktStd+1, wakeuptimeWeekdays[aktStd+1], timeClient.getSeconds());
+
+
+        //wie lange er schlafen darf
+        //Wert sollte schon in Sekunden sein --> weil echo sekunden zurück gibt
+        schlafdauer = aufwachzeit - aktuelleUhrzeit;
+        return schlafdauer;
+      }
+
+  }
+//_______________________________________normaler_Schultag__________________________________________________________________________
+
+
+
+
+//_______________________________________Wochenende________________________________________________________________________________
+
+  else
+  {
+    //wenn Samstag, Sonntag, Freitag nach 17:00 --> bis Montag um 07:51 schlafen
+    //Freitag
+    if(aktuellerWochentag == 5)
+    {
+      if(aktStd >= 17)
+      {
+        //wenn in allen Räumen nichts angezeigt wird, dann soll er bis um 08:00 am Folgetag schlafen
+        int aktStd = timeClient.getHours();
+        long int aufwachzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec)+3,  '07', '51', '00');
+
+        // exakte aktuelle Uhrzeit ausrechnen, damit die Schlafdauer möglichst genau ist
+        aktuelleUhrzeit = timeClient.getEpochTime();    
+            
+        //Wert ist in Sekunden --> weil echo sekunden zurück gibt
+        schlafdauer = aufwachzeit - aktuelleUhrzeit;
+        return schlafdauer; 
+      }
+      
+    }
+
+    //Samstag
+    else if(aktuellerWochentag == 6)
+    {
+
+        //wenn in allen Räumen nichts angezeigt wird, dann soll er bis um 08:00 am Folgetag schlafen
+        int aktStd = timeClient.getHours();
+        long int aufwachzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec)+2,  '07', '51', '00');
+
+        // exakte aktuelle Uhrzeit ausrechnen, damit die Schlafdauer möglichst genau ist
+        aktuelleUhrzeit = timeClient.getEpochTime();    
+            
+        //Wert ist in Sekunden --> weil echo sekunden zurück gibt
+        schlafdauer = aufwachzeit - aktuelleUhrzeit;
+        return schlafdauer;
+      
+    }
+
+    //Sonntag
+    else if(aktuellerWochentag == 0)
+    {
+        //wenn Sonntag, dann soll er bis um 08:00 am Folgetag schlafen
+        int aktStd = timeClient.getHours();
+        long int aufwachzeit = tmConvert_t(timeClient.getYear(sec), timeClient.getMonth(sec), timeClient.getDayNumber(sec)+1,  '07', '51', '00');
+
+        // exakte aktuelle Uhrzeit ausrechnen, damit die Schlafdauer möglichst genau ist
+        aktuelleUhrzeit = timeClient.getEpochTime();    
+            
+        //Wert ist in Sekunden --> weil echo sekunden zurück gibt
+        schlafdauer = aufwachzeit - aktuelleUhrzeit;
+        return schlafdauer;
+    }
+  } 
+//_______________________________________Wochenende________________________________________________________________________________
+}
+
+
+
+
+
+
+
+//Funktion, um ein Datum bzw Uhrzeit in einen epoch Code zu wandeln
+time_t tmConvert_t(int YYYY, byte MM, byte DD, byte hh, byte mm, byte ss)
+{
+ 
+  tmElements_t tmSet;
+  tmSet.Year = YYYY - 1970;
+  tmSet.Month = MM;
+  tmSet.Day = DD;
+  tmSet.Hour = hh;
+  tmSet.Minute = mm;
+  tmSet.Second = ss;
+  return makeTime(tmSet);
+}
+
+
+
+
+
 
 
 void reconnect() {
@@ -405,11 +615,10 @@ void reconnect() {
     }
   }
 }
- 
-void callback(char* topic, byte* payload, unsigned int length) {
 
- 
-  
+
+
+void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println("-----------------------");
   Serial.println("Message arrived in topic: ");
   Serial.println(topic);
@@ -441,4 +650,23 @@ while(ptr != NULL) {
     Serial.println("-----------------------");
      
   a=1;
+}
+
+
+
+
+//https://lastminuteengineers.com/esp32-deep-sleep-wakeup-sources/
+//diese Funktion gibt den Grund an, warum der ESP aufgewacht ist
+void print_wakeup_reason(){
+  esp_sleep_wakeup_cause_t wakeup_reason;
+  wakeup_reason = esp_sleep_get_wakeup_cause();
+  switch(wakeup_reason)
+  {
+    case 1  : Serial.println("Wakeup caused by external signal using RTC_IO"); break;
+    case 2  : Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
+    case 3  : Serial.println("Wakeup caused by timer"); break;
+    case 4  : Serial.println("Wakeup caused by touchpad"); break;
+    case 5  : Serial.println("Wakeup caused by ULP program"); break;
+    default : Serial.println("Wakeup was not caused by deep sleep"); break;
+  }
 }

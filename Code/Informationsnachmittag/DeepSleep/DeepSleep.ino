@@ -1,4 +1,5 @@
-//reguläres Programm
+//Innovations Nachmittag
+
 #include <GxEPD.h>
 //#include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>

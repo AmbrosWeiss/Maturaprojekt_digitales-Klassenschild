@@ -69,12 +69,12 @@ void loop() {
   display.setTextSize(2);
   //x,y
   display.setCursor(540,22);
-  display.print("07.12");
+  display.print("07.03");
   
   //Einheit
   display.setTextSize(2);
   display.setCursor(540,45);
-  display.print("9. EH");
+  display.print("4. EH");
   
   //Lehrer
   display.setTextSize(2);
